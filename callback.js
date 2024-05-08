@@ -1,11 +1,12 @@
 import "./utility.js"
 const tips = 'Required custom callback method: '
 const cb = {
-	toast: (msg, time) => {
-		console.log(tips + 'toast: (msg, time)')
+	empty: () => { },
+	toast: (msg, type) => {
+		console.log(tips + 'toast: (msg, type)')
 	},
-	alert: (msg, fn) => {
-		console.log(tips + 'alert: (msg, fn)')
+	alert: (msg, fnOk) => {
+		console.log(tips + 'alert: (msg, fnOk)')
 	},
 	confirm: (msg, fnYes, fnNot, txtYes, txtNot) => {
 		console.log(tips + 'confirm: (msg, fnYes, fnNot, txtYes, txtNot)')
@@ -48,6 +49,15 @@ const cb = {
 	}
 }
 if(typeof uni == 'object') {
+	cb.toast = (msg, type) => {
+		uni.showToast({title: msg, icon: type || 'none', position: 'bottom', duration: 3000 })
+	}
+	cb.alert = (msg, fnOk) => {
+		uni.showModal({title: '', showCancel: false, confirmText: '确定', content: msg, success: fnOk || cb.empty })
+	}
+	cb.confirm = (msg, fnYes, fnNot, txtYes, txtNot) => {
+		uni.showModal({ content: msg, confirmText: (txtYes || '确定'), cancelText: (txtNot || '取消'), success: (cfm)=> { if(cfm.confirm) { fnYes && fnYes() } if(cfm.cancel) { fnNot && fnNot()} } })
+	}
 	cb.goback = (delta) => {
 		return uni.navigateBack({ delta: delta || 1 })
 	}
@@ -126,18 +136,29 @@ if(typeof uni == 'object') {
 	}
 	if(typeof fetch == 'function') {
 		cb.request = (method, host, path, data, headers, fnYes, fnNot) => {
-			fetch(host + path, { method: method, headers: headers, body: JSON.stringify(data) }).then((res) => res.json()).then((data) => {
-				fnYes(data)
+			let obj = { header: { } }
+			fetch(host + path, { method: method, headers: headers, body: JSON.stringify(data) }).then((res) => {
+				res.headers.forEach((val, key) => { obj.header[key] = val })
+				obj.status = res.status
+				return res.json()
+			}).then((res) => {
+				obj.data = res
+				fnYes(obj)
 			}).catch((error) => {
 				fnNot({success: false, message: error })
 			})
 		}
 		cb.upload = (filter, host, path, file, headers, fnYes, fnNot) => {
+			let obj = { header: { } }
 			let form = new FormData();
 			form.append('file', file);
 			form.append('filter', filter);
-			fetch(host + path, { method: 'post', headers: headers, body: form }).then((res) => res.json()).then((data) => {
-				fnYes(data)
+			fetch(host + path, { method: 'post', headers: headers, body: form}).then((res) => {
+				res.headers.forEach((val, key) => { obj.header[key] = val })
+				obj.status = res.status
+				return res.json()
+			}).then((res) => {
+				fnYes(res)
 			}).catch((error) => {
 				fnNot({success: false, message: error })
 			})

@@ -27,13 +27,13 @@ function createWln(opts, callback) {
 	}
 	if (opts && typeof opts == 'object') { for (let k in opts) { wln.cfgs[k] = opts[k] } } //设置配置内容
     if (callback != undefined) { for (let k in callback) { cb[k] = callback[k] } } //重载回调方法
-    wln.empty = () => { }
+    wln.empty = () => { cb.empty() }
     wln.login = () => { cb.login() }
     wln.logout = () => { cb.logout() }
     wln.debug = (msg) => { if(wln.debug && msg) { console.debug(msg) } }
-    wln.toast = (msg, time) => { cb.toast(msg, time) }
-    wln.alert = (msg, fn) => { cb.alert(msg, fn) }
-    wln.confirm = (msg, fnYes, fnNot) => { cb.confirm(msg, fnYes, fnNot) }
+    wln.toast = (msg, type) => { cb.toast(msg, type) }
+    wln.alert = (msg, fnOk) => { cb.alert(msg, fnOk || cb.empty ) }
+    wln.confirm = (msg, fnYes, fnNot, txtYes, txtNot) => { cb.confirm(msg, fnYes || cb.empty, fnNot || cb.empty, txtYes, txtNot) }
     wln.gourl = (url, type) => { return cb.gourl(url, type) }
     wln.goback = (delta) => { return cb.goback(delta) }
     wln.loadingShow = (title) => { return cb.loadingShow(title) }
