@@ -126,18 +126,29 @@ if(typeof uni == 'object') {
 	}
 	if(typeof fetch == 'function') {
 		cb.request = (method, host, path, data, headers, fnYes, fnNot) => {
-			fetch(host + path, { method: method, headers: headers, body: JSON.stringify(data) }).then((res) => res.json()).then((data) => {
-				fnYes(data)
+			let obj = { header: { } }
+			fetch(host + path, { method: method, headers: headers, body: JSON.stringify(data) }).then((res) => {
+				res.headers.forEach((val, key) => { obj.header[key] = val })
+				obj.status = res.status
+				return res.json()
+			}).then((res) => {
+				obj.data = res
+				fnYes(obj)
 			}).catch((error) => {
 				fnNot({success: false, message: error })
 			})
 		}
 		cb.upload = (filter, host, path, file, headers, fnYes, fnNot) => {
+			let obj = { header: { } }
 			let form = new FormData();
 			form.append('file', file);
 			form.append('filter', filter);
-			fetch(host + path, { method: 'post', headers: headers, body: form }).then((res) => res.json()).then((data) => {
-				fnYes(data)
+			fetch(host + path, { method: 'post', headers: headers, body: form}).then((res) => {
+				res.headers.forEach((val, key) => { obj.header[key] = val })
+				obj.status = res.status
+				return res.json()
+			}).then((res) => {
+				fnYes(res)
 			}).catch((error) => {
 				fnNot({success: false, message: error })
 			})
