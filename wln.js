@@ -96,9 +96,9 @@ function createWln(opts, callback) {
 	}
     wln.upload = (path, file, callfn, filter) => {
 		cb.upload(filter, wln.cfgs.api, path, file, { Authorization: wln.getStorageSync('ticket') || '' }, (res) => {
-			callfn(res.data)
+			callfn(res)
 		},(err) => {
-			callfn({success: false, message: err.errMsg })
+			callfn(err)
 		})
 	}
     return wln
