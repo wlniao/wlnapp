@@ -54,7 +54,7 @@ function createWln(opts, callback) {
     */
     wln.api = (path, callfn, data, encrypt, noAuth, failfn) => {
 		let token = ''.randomString(16)
-		let headers = { Authorization: wln.getStorageSync('ticket') || '' }
+		let headers = { Authorization: wln.getStorageSync('ticket') || '', 'x-domain': wln.getStorageSync('x-domain') || '' }
 		if(data && encrypt && wln.cfgs.pk)
 		{
 			if(wln.cfgs.debug) { wln.debug(data) }
