@@ -64,9 +64,9 @@ if(typeof uni == 'object') {
 	cb.gourl = (url, type) => {
 		if(url.indexOf('://') < 0) {
 			if(type == 'tab') {
-				return uni.switchTab({ url: url})
+				return uni.switchTab({ url: url })
 			} else if(type == 'red') {
-				return uni.redirectTo({ url: url})
+				return uni.redirectTo({ url: url })
 			} else {
 				return uni.navigateTo({ url: url })
 			}
@@ -120,7 +120,16 @@ if(typeof uni == 'object') {
 			return history.back(delta || 1)
 		}
 		cb.gourl = (url, type) => {
-			return location.href = url
+			if(url.indexOf('://') < 0) {
+				if(type == 'red') {
+					history.replaceState(null, null, url)
+					location.reload()
+				} else {
+					return location.href = url
+				}
+			} else {
+				return location.href = url
+			}
 		}
 	}
 	if(typeof localStorage == 'object') {
