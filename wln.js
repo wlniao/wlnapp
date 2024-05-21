@@ -34,6 +34,7 @@ function createWln(opts, callback) {
     wln.toast = (msg, type) => { cb.toast(msg, type) }
     wln.alert = (msg, fnOk) => { cb.alert(msg, fnOk || cb.empty ) }
     wln.confirm = (msg, fnYes, fnNot, txtYes, txtNot) => { cb.confirm(msg, fnYes || cb.empty, fnNot || cb.empty, txtYes, txtNot) }
+    wln.prompt = (msg, fnYes, fnNot, txtYes, txtNot, inputTips) => { cb.prompt(msg, fnYes || cb.empty, fnNot || cb.empty, txtYes, txtNot, inputTips) }
     wln.gourl = (url, type) => { return cb.gourl(url, type) }
     wln.goback = (delta) => { return cb.goback(delta) }
     wln.loadingShow = (title) => { return cb.loadingShow(title) }

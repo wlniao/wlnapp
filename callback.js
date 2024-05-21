@@ -11,6 +11,9 @@ const cb = {
 	confirm: (msg, fnYes, fnNot, txtYes, txtNot) => {
 		console.log(tips + 'confirm: (msg, fnYes, fnNot, txtYes, txtNot)')
 	},
+	prompt: (msg, fnYes, fnNot, txtYes, txtNot, inputTips) => {
+		console.log(tips + 'prompt: (msg, fnYes, fnNot, txtYes, txtNot, inputTips)')
+	},
 	request: (method, host, path, data, headers, fnYes, fnNot) => {
 		console.log(tips + 'request: (method, host, path, data, headers, fnYes, fnNot)')
 	},
