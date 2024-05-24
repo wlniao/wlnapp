@@ -149,7 +149,7 @@ if(typeof uni == 'object') {
 	if(typeof fetch == 'function') {
 		cb.request = (method, host, path, data, headers, fnYes, fnNot) => {
 			let obj = { header: { } }
-			fetch(host + path, { method: method, headers: headers, body: JSON.stringify(data) }).then((res) => {
+			fetch(host + path, { method: method, headers: headers, body: typeof data === 'string' ? data : JSON.stringify(data) }).then((res) => {
 				res.headers.forEach((val, key) => { obj.header[key] = val })
 				obj.status = res.status
 				return res.json()
