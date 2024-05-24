@@ -104,6 +104,40 @@ Date.prototype.format = function (fmt) {
 	}
 	return fmt;
 }
+
+/**
+ * 显示时间
+ * @param time 时间
+ * @param formatString 时间格式
+ */
+function ShowTime(time, formatString) {
+	if (!formatString) {
+		formatString = 'yyyy-MM-dd HH:mm:ss'
+	}
+	if (!time) {
+		return new Date().format(formatString)
+	} else if(typeof time == 'string') {
+		if(time.indexOf(':') > 0 || time.indexOf('-') > 0 || !parseInt(time) || parseInt(time) <= 1000) {
+			return time
+		} else {
+			time = parseInt(time)
+		}
+	}
+	if(time <= 1000) {
+		return ''
+	} else if(time < 99999999999) {
+		return new Date(time * 1000).format(formatString)
+	} else {
+		return new Date(time).format(formatString)
+	}
+}
+Number.prototype.showTime = function(formatString) {
+    return ShowTime(this, formatString)
+}
+String.prototype.showTime = function(formatString) {
+    return ShowTime(this, formatString)
+}
+
 //字符串格式化
 String.prototype.format = function () {
 	var args = arguments;
