@@ -12,6 +12,58 @@ let components = {
 	//wlnDataPicker,
 	//cuCustom 
 }
+if(typeof window !== 'undefined') {
+	window.emiOpenTab = function(url, name) {
+		if (!parent || parent === self) {
+			location.href = url
+		} else if(cb.getStorageSync('x-domain')) {
+			let ifr = document.createElement('iframe');
+			ifr.id = 'emifr';
+			ifr.name = 'emifr';
+			ifr.src = '//' + cb.getStorageSync('x-domain') + '/jsapi?do=open&url=' + encodeURIComponent(url) + '&name=' + encodeURI(name);
+			ifr.style.display = 'none';
+			document.body.appendChild(ifr);
+		} else {
+			cb.toast('not found emi host')
+		}
+	}
+	window.emiBackTab = function(name) {
+		if(cb.getStorageSync('x-domain')) {
+			let ifr = document.createElement('iframe');
+			ifr.id = 'emifr';
+			ifr.name = 'emifr';
+			ifr.src = '//' + cb.getStorageSync('x-domain') + '/jsapi?do=back&name=' + encodeURI(name);
+			ifr.style.display = 'none';
+			document.body.appendChild(ifr);
+		} else {
+			cb.toast('not found emi host')
+		}
+	}
+	window.emiCloseTab = function(name) {
+		if(cb.getStorageSync('x-domain')) {
+			let ifr = document.createElement('iframe');
+			ifr.id = 'emifr';
+			ifr.name = 'emifr';
+			ifr.src = '//' + cb.getStorageSync('x-domain') + '/jsapi?do=close&name=' + encodeURI(name);
+			ifr.style.display = 'none';
+			document.body.appendChild(ifr);
+		} else {
+			cb.toast('not found emi host')
+		}
+	}
+	window.emiToLogin = function() {
+		if(cb.getStorageSync('x-domain')) {
+			let ifr = document.createElement('iframe');
+			ifr.id = 'emifr';
+			ifr.name = 'emifr';
+			ifr.src = '//' + cb.getStorageSync('x-domain') + '/jsapi?do=tologin';
+			ifr.style.display = 'none';
+			document.body.appendChild(ifr);
+		} else {
+			cb.toast('not found emi host')
+		}
+	}
+}
 if(typeof window !== 'undefined' && window.Vue) {
 	for(let k in components) { window.Vue.use(components[k]) }
 }
