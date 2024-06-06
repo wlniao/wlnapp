@@ -1,0 +1,21 @@
+.editor-box {
+  border: 1px solid var(--el-input-border-color, var(--el-border-color));
+  border-radius: var(--el-input-border-radius, var(--el-border-radius-base));
+  line-height:initial;position:relative;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+.editor-box .w-e-bar {
+  margin-bottom: -1px;
+}
+.editor-box .w-e-text-container {
+  min-height: 380px;
+  max-height: 500px;
+  border-top: 1px solid var(--el-input-border-color, var(--el-border-color));
+}
+.editor-box .w-e-bar-item {
+  border-bottom: 1px solid var(--el-input-border-color, var(--el-border-color));
+}
+.editor-box .w-e-bar-divider {
+  margin: 0;
+}

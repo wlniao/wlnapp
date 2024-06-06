@@ -1,0 +1,53 @@
+.diy-content {
+    padding-bottom: 60px;
+    line-height: 1.8em;
+    font-family: system-ui,-apple-system,BlinkMacSystemFont,"PingFang SC","Helvetica Neue",Helvetica,"Hiragino Sans GB",Arial,Verdana,"Microsoft Yahei";
+}
+
+.diy-content img {
+    max-width: 98%;
+    vertical-align: middle;
+}
+.diy-content p {
+    font-size: 16px;
+}
+.diy-content h1,.diy-content h2,.diy-content h3,.diy-content h4,.diy-content h5 {
+    margin-top: 1em;
+    font-weight: 600;
+    line-height: 2em;
+ }
+.diy-content h2, .diy-content h3, .diy-content h4, .diy-content h5 {
+    text-indent: 32px;
+}
+.diy-content h1 {
+    font-size: 34px;
+    line-height: 36px;
+    font-weight: 600;
+    color: #222d39;
+    font-family: "Poppins", sans-serif;
+    margin-bottom: 5px;
+}
+.diy-content .summary {
+    color: #8b8b8b;
+    font-size: 14px;
+    margin-top: 20px;
+}
+.diy-content .summary > span {
+    margin-right: 20px;
+}
+.diy-content h2 {
+    font-size: 24px;
+}
+.diy-content h3 {
+    font-size: 18px;
+}
+.diy-content p {
+    color: #4c5267;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.75em;
+    margin-bottom: 20px;
+}
+.diy-content p a {
+    color: #4192e3;
+}
