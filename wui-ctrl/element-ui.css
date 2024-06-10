@@ -57,7 +57,7 @@ textarea {resize:none}select,input,textarea{outline:none;-webkit-tap-highlight-c
 
 /*重置ElementUI样式*/
 .el-button{padding:12px 15px !important; cursor:pointer !important}
-.el-button + .el-button, .el-input + .el-input, .el-input + .el-button, .el-input + .el-select, .el-select + .el-input {margin-left:3px !important}
+.el-button + .el-button, .el-input + .el-input, .el-input + .el-button, .el-input + .el-select, .el-select + .el-input, .el-select + .el-select {margin-left:3px !important}
 .el-button.el-button--none {color:#409EFF;border:none;padding:inherit;background-color:transparent;}
 .el-button.el-button--none:hover,.el-button.el-button--none:active {color:#409EFF;border-color:none;background-color:transparent;}
 .el-button--gray,.el-button--more,.el-button--primary,.el-button--success,.el-button--warning,.el-button--danger{border:none !important;padding:13px 15px !important}
