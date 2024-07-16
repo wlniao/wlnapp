@@ -77,7 +77,7 @@ function createWln(opts, callback) {
 			bgColor: '#ffffff',
 		}
 	}
-	if (opts && typeof opts == 'object') { for (let k in opts) { wln.cfgs[k] = opts[k] } } //设置配置内容
+    if (opts && typeof opts == 'object') { for (let k in opts) { wln.cfgs[k] = opts[k] } } //设置配置内容
     if (callback != undefined) { for (let k in callback) { cb[k] = callback[k] } } //重载回调方法
     wln.empty = () => { cb.empty() }
     wln.login = () => { cb.login() }
@@ -108,6 +108,10 @@ function createWln(opts, callback) {
     wln.api = (path, callfn, data, encrypt, noAuth, failfn) => {
 		let token = ''.randomString(16)
 		let headers = { Authorization: wln.getStorageSync('ticket') || '', 'x-domain': wln.getStorageSync('x-domain') || '' }
+		if(wln.cfgs.headers)
+		{
+			for(let i in wln.cfgs.headers) { headers[i] = wln.cfgs.headers[i] }
+		}
 		if(data && encrypt && wln.cfgs.pk)
 		{
 			if(wln.cfgs.debug) { wln.debug(data) }
