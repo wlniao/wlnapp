@@ -14,7 +14,8 @@ textarea {resize:none}select,input,textarea{outline:none;-webkit-tap-highlight-c
 .h20{height:20px}.h50{height:50px}
 .c00{color:#000000}.c33{color:#333333}.c66{color:#666666}.c99{color:#999999}.cff{color:#ffffff}.cr1{color:#ee0a24;}.cg1{color:#4caf50;}.cb1{color:#2196f3;}.c-info{color:#909399}.c-danger{color:#F56C6C}.c-primary{color:#409EFF}.c-success{color:#67C23A}.c-warning{color:#E6A23C}.c-golden{color:#ffc107}
 .fs12{font-size:12px}.fs13{font-size:13px}.fs14{font-size:14px}.fs15{font-size:15px}.fs16{font-size:16px}.fs18{font-size:18px}.fs20{font-size:20px}.fs24{font-size:24px}.fs32{font-size:32px}
-.lh12{line-height:12px}.lh14{line-height:14px}.lh16{line-height:16px}.lh20{line-height:20px}.lh50{line-height:50px}
+.lh12{line-height:12px}.lh14{line-height:14px}.lh16{line-height:16px}.lh18{line-height:18px}.lh20{line-height:20px}.lh24{line-height:24px}.lh50{line-height:50px}
+.ml3{margin-left:3px !important}.ml6{margin-left:6px !important}.ml12{margin-left:12px !important}.mr3{margin-right:3px !important}.mr6{margin-right:6px !important}.mr12{margin-right:12px !important}
 .line{clear:both;border-bottom:1px solid #d8d8d8;}.line15{height:15px;line-height:15px;clear:both;}.line20{height:20px;line-height:20px;clear:both;}.line30{height:30px;line-height:30px;clear:both;}
 .txt-nowrap{white-space:nowrap;word-break:keep-all;text-overflow:ellipsis;overflow:hidden}
 .tips{color:#999999;vertical-align:top;}.tips::before{content:'*';color:#999999;margin-left:8px;font-family:cursive;vertical-align:bottom;padding-right:3px;}
@@ -57,7 +58,7 @@ textarea {resize:none}select,input,textarea{outline:none;-webkit-tap-highlight-c
 
 /*重置ElementUI样式*/
 .el-button{padding:12px 15px !important; cursor:pointer !important}
-.el-button + .el-button, .el-input + .el-input, .el-input + .el-button, .el-input + .el-select, .el-select + .el-input, .el-select + .el-select {margin-left:3px !important}
+.el-button + .el-button, .el-input + .el-button, .el-select + .el-button, .el-input + .el-input, .el-input + .el-select, .el-select + .el-input, .el-select + .el-select {margin-left:3px !important}
 .el-button.el-button--none {color:#409EFF;border:none;padding:inherit;background-color:transparent;}
 .el-button.el-button--none:hover,.el-button.el-button--none:active {color:#409EFF;border-color:none;background-color:transparent;}
 .el-button--gray,.el-button--more,.el-button--primary,.el-button--success,.el-button--warning,.el-button--danger{border:none !important;padding:13px 15px !important}
