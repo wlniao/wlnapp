@@ -152,7 +152,7 @@ function createWln(opts, callback) {
 		})
 	}
     wln.upload = (path, file, callfn, filter) => {
-		cb.upload(filter, wln.cfgs.api, path, file, { Authorization: wln.getStorageSync('ticket') || '' }, (res) => {
+		cb.upload(filter, wln.cfgs.api, path, file, { authorization: wln.getStorageSync('ticket') || '', 'x-domain': wln.getStorageSync('x-domain') || '' }, (res) => {
 			callfn(res)
 		},(err) => {
 			callfn(err)
