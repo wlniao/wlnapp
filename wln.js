@@ -107,7 +107,7 @@ function createWln(opts, callback) {
     */
     wln.api = (path, callfn, data, encrypt, noAuth, failfn) => {
 		let token = ''.randomString(16)
-		let headers = { Authorization: wln.getStorageSync('ticket') || '', 'x-domain': wln.getStorageSync('x-domain') || '' }
+		let headers = { authorization: wln.getStorageSync('ticket') || '', 'x-domain': wln.getStorageSync('x-domain') || '' }
 		if(wln.cfgs.headers)
 		{
 			for(let i in wln.cfgs.headers) { headers[i] = wln.cfgs.headers[i] }
