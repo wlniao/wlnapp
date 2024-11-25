@@ -58,7 +58,8 @@ textarea {resize:none}select,input,textarea{outline:none;-webkit-tap-highlight-c
 
 /*重置ElementUI样式*/
 .el-button{padding:12px 15px !important; cursor:pointer !important}
-.el-button + .el-button, .el-input + .el-button, .el-select + .el-button, .el-input + .el-input, .el-input + .el-select, .el-select + .el-input, .el-select + .el-select {margin-left:3px !important}
+/* .el-button + .el-button, .el-input + .el-button, .el-select + .el-button, .el-input + .el-input, .el-input + .el-select, .el-select + .el-input, .el-select + .el-select,  */
+*[class^="el-"] + *[class^="el-input"], *[class^="el-"] + *[class^="el-select"], *[class^="el-"] + *[class^="el-button"], *[class^="el-"] + *[class^="el-date-"] {margin-left:3px !important}
 .el-button.el-button--none {color:#409EFF;border:none;padding:inherit;background-color:transparent;}
 .el-button.el-button--none:hover,.el-button.el-button--none:active {color:#409EFF;border-color:none;background-color:transparent;}
 .el-button--gray,.el-button--more,.el-button--primary,.el-button--success,.el-button--warning,.el-button--danger{border:none !important;padding:13px 15px !important}
@@ -97,7 +98,8 @@ textarea {resize:none}select,input,textarea{outline:none;-webkit-tap-highlight-c
 .el-form-group {color:#9e9e9e;text-align:center;background:#efefef;line-height:25px;margin-bottom:22px;}
 .el-form-btns {position:sticky;bottom:0;z-index:1005;border-top:1px solid #f1f1f1;margin-bottom:0;padding:7px 0;background-color:rgba(255,255,255,0.8);}
 .el-link.el-tooltip {vertical-align: text-bottom}
-.el-select__wrapper {min-height:40px !important}
+.wln {--el-input-height: 40px;}
+.wln .el-select__wrapper {min-height:40px !important}
 .wln .el-pagination {margin: 8px 0;}
 .wln .el-pagination .wln-slot {margin-left:24px;font-weight:400;color:#607d8b;} .wln .el-pagination__editor.el-input {height: 30px !important;}
 .wln-title button,.wln-subtitle button {vertical-align:middle;}
