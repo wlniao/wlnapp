@@ -101,6 +101,7 @@ textarea {resize:none}select,input,textarea{outline:none;-webkit-tap-highlight-c
 .wln .el-select__wrapper {min-height:40px !important}
 .wln .el-pagination {margin: 8px 0;}
 .wln .el-pagination .wln-slot {margin-left:24px;font-weight:400;color:#607d8b;} .wln .el-pagination__editor.el-input {height: 30px !important;}
+.wln .el-date-editor .el-range-input {width: 42%}.wln .el-date-editor .el-range-separator {padding: 0; font-size: 12px; color: var(--el-text-color-placeholder); user-select: none;}
 .wln-title button,.wln-subtitle button {vertical-align:middle;}
 .wln-title .el-button--small,.wln-subtitle .el-button--small {line-height:16px;vertical-align:middle;}
 .wln-title .el-input__inner {height:28px;padding-left:12px;}.wln-title .el-input__suffix {line-height:28px;}
