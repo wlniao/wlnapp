@@ -13,6 +13,9 @@ let components = {
 	//cuCustom 
 }
 if(typeof window !== 'undefined') {
+	window.ShowTime = function(time, formatString) {
+		return time.showTime(formatString)
+	}
 	window.emiOpenTab = function(url, name) {
 		if (!parent || parent === self) {
 			location.href = url
