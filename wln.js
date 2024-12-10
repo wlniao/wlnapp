@@ -111,10 +111,7 @@ function createWln(opts, callback) {
     wln.api = (path, callfn, data, encrypt, noAuth, failfn) => {
 		let token = ''.randomString(16)
 		let headers = { authorization: wln.getStorageSync('ticket') || '', 'x-domain': wln.getStorageSync('x-domain') || '' }
-		if(wln.cfgs.headers)
-		{
-			for(let i in wln.cfgs.headers) { headers[i] = wln.cfgs.headers[i] }
-		}
+		if (wln.cfgs.headers) { for(let i in wln.cfgs.headers) { headers[i] = wln.cfgs.headers[i] } }
 		if(data && encrypt && wln.cfgs.pk)
 		{
 			if(wln.cfgs.debug) { wln.debug(data) }
@@ -156,10 +153,7 @@ function createWln(opts, callback) {
 	}
     wln.upload = (path, file, callfn, filter) => {
 		let headers = { authorization: wln.getStorageSync('ticket') || '', 'x-domain': wln.getStorageSync('x-domain') || '' }
-		if(wln.cfgs.headers)
-		{
-			for(let i in wln.cfgs.headers) { headers[i] = wln.cfgs.headers[i] }
-		}
+		if (wln.cfgs.headers) { for(let i in wln.cfgs.headers) { headers[i] = wln.cfgs.headers[i] } }
 		cb.upload(filter, wln.cfgs.api, path, file, headers, (res) => {
 			callfn(res)
 		},(err) => {
