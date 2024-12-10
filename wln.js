@@ -155,7 +155,12 @@ function createWln(opts, callback) {
 		})
 	}
     wln.upload = (path, file, callfn, filter) => {
-		cb.upload(filter, wln.cfgs.api, path, file, { authorization: wln.getStorageSync('ticket') || '', 'x-domain': wln.getStorageSync('x-domain') || '' }, (res) => {
+		let headers = { authorization: wln.getStorageSync('ticket') || '', 'x-domain': wln.getStorageSync('x-domain') || '' }
+		if(wln.cfgs.headers)
+		{
+			for(let i in wln.cfgs.headers) { headers[i] = wln.cfgs.headers[i] }
+		}
+		cb.upload(filter, wln.cfgs.api, path, file, headers, (res) => {
 			callfn(res)
 		},(err) => {
 			callfn(err)
