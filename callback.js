@@ -139,7 +139,7 @@ if(typeof uni == 'object') {
 		cb.getStorageSync = (key) => {
 			return localStorage.getItem(key)
 		}
-		cb.setStorageSync = (key) => {
+		cb.setStorageSync = (key, val) => {
 			return localStorage.setItem(key, val)
 		}
 		cb.removeStorageSync = (key) => {
