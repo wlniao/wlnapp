@@ -65,14 +65,16 @@ if(typeof uni == 'object') {
 		return uni.navigateBack({ delta: delta || 1 })
 	}
 	cb.gourl = (url, type) => {
-		if(url.indexOf('://') < 0) {
-			if(type == 'tab') {
+		if (url.indexOf('://') < 0) {
+			if (type == 'tab') {
 				return uni.switchTab({ url: url })
-			} else if(type == 'red') {
+			} else if (type == 'red') {
 				return uni.redirectTo({ url: url })
 			} else {
 				return uni.navigateTo({ url: url })
 			}
+		} else if (typeof window == 'object') {
+			return location.href = url
 		} else {
 			return uni.navigateTo({ url: url })
 		}
