@@ -26,8 +26,8 @@ const cb = {
 	logout: () => {
 		console.log(tips + 'logout()')
 	},
-	noauth: (invite) => {
-		console.log(tips + 'noauth: (invite)')
+	noauth: (obj) => {
+		console.log(tips + 'noauth: (obj)')
 	},
 	gourl(url, type) {
 		console.log(tips + 'gourl(url, type)')

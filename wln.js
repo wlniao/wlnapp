@@ -121,7 +121,7 @@ function createWln(opts, callback) {
 		cb.request('POST', wln.cfgs.api, path, data, headers, (res) => {
 			if(noAuth !== true && res.header && res.header['authify-state'] === 'false') {
 				cb.loadingHide()
-				cb.noauth(noAuth)
+				cb.noauth(res.data || {})
 			} else if(typeof callfn === 'function') {
 				if(encrypt && wln.cfgs.pk && res.data && res.data.data && typeof res.data.data === 'string')
 				{
