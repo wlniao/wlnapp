@@ -9,7 +9,7 @@ textarea {resize:none}select,input,textarea{outline:none;-webkit-tap-highlight-c
 /*框架布局部分 开始*/
 .ti20 {text-indent:20px}
 .vt{vertical-align:top}.vm{vertical-align:middle}.vb{vertical-align:bottom}
-.cla{clear:both}.cll{clear:left}.clr{clear:right}
+.cla{clear:both}.cll{clear:left}.clr{clear:right}.fr{float:right}.fl{float:left}
 .bg-info{background-color:#909399 !important}.bg-danger{background-color:#F56C6C !important}.bg-primary{background-color:#409EFF !important}.bg-success{background-color:#67C23A !important}.bg-warning{background-color:#E6A23C !important}
 .h20{height:20px}.h50{height:50px}
 .c00{color:#000000}.c33{color:#333333}.c66{color:#666666}.c99{color:#999999}.cff{color:#ffffff}.cr1{color:#ee0a24;}.cg1{color:#4caf50;}.cb1{color:#2196f3;}.c-info{color:#909399}.c-danger{color:#F56C6C}.c-primary{color:#409EFF}.c-success{color:#67C23A}.c-warning{color:#E6A23C}.c-golden{color:#ffc107}
