@@ -94,7 +94,7 @@ function createWln(opts, callback) {
     wln.goback = (delta) => { return cb.goback(delta) }
     wln.loadingShow = (title) => { return cb.loadingShow(title) }
     wln.loadingHide = () => { return cb.loadingHide() }
-    wln.getStorageSync = (key) => { return cb.getStorageSync(key) }
+    wln.getStorageSync = (key, val) => { return cb.getStorageSync(key, val) }
     wln.setStorageSync = (key, val) => { return cb.setStorageSync(key, val) }
     wln.removeStorageSync = (key) => { return cb.removeStorageSync(key) }
 	wln.ext = cb
@@ -110,7 +110,7 @@ function createWln(opts, callback) {
     */
     wln.api = (path, callfn, data, encrypt, noAuth, failfn) => {
 		let token = ''.randomString(16)
-		let headers = { authorization: wln.getStorageSync('ticket') || '', 'x-domain': wln.getStorageSync('x-domain') || '' }
+		let headers = { authorization: wln.getStorageSync('ticket') || '', 'x-domain': wln.getStorageSync('x-domain') || '', 'locale': wln.getStorageSync('locale') || '' }
 		if (wln.cfgs.headers) { for(let i in wln.cfgs.headers) { headers[i] = wln.cfgs.headers[i] } }
 		if(data && encrypt && wln.cfgs.pk)
 		{

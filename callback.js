@@ -41,8 +41,8 @@ const cb = {
 	loadingHide() {
 		console.log(tips + 'loadingHide()')
 	},
-	getStorageSync(key) {
-		console.log(tips + 'getStorageSync(key)')
+	getStorageSync(key, val) {
+		console.log(tips + 'getStorageSync(key, val)')
 	},
 	setStorageSync(key, val) {
 		console.log(tips + 'setStorageSync(key, val)')
@@ -138,11 +138,33 @@ if(typeof uni == 'object') {
 		}
 	}
 	if(typeof localStorage == 'object') {
-		cb.getStorageSync = (key) => {
-			return localStorage.getItem(key)
+		cb.getStorageSync = (key, val) => {
+			let tmp = localStorage.getItem(key);
+			if(tmp) {
+				if(typeof val == 'string') {
+					return tmp
+				} else if(typeof val == 'number') {
+					return parseFloat(tmp) || val
+				} else if(typeof val == 'boolean') {
+					return tmp === 'true'
+				} else {
+					return JSON.parse(tmp) || val
+				}
+			} else {
+				cb.setStorageSync(key, val)
+				return val
+			}
 		}
 		cb.setStorageSync = (key, val) => {
-			return localStorage.setItem(key, val)
+			if(typeof val == 'object') {
+				return localStorage.setItem(key, JSON.stringify(val))
+			} else if(typeof val == 'string') {
+				return localStorage.setItem(key, val)
+			} else if(typeof val == 'number' || typeof val == 'boolean') {
+				return localStorage.setItem(key, val.toString())
+			} else {
+				return localStorage.setItem(key, '')
+			}
 		}
 		cb.removeStorageSync = (key) => {
 			return localStorage.removeItem(key)
