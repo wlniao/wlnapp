@@ -110,8 +110,8 @@ if(typeof uni == 'object') {
 			}
 		})
 	}
-	cb.getStorageSync = (key) => {
-		return uni.getStorageSync(key)
+	cb.getStorageSync = (key, val) => {
+		return uni.getStorageSync(key) || val
 	}
 	cb.setStorageSync = (key, val) => {
 		return uni.setStorageSync(key, val)
@@ -147,10 +147,12 @@ if(typeof uni == 'object') {
 					return parseFloat(tmp) || val
 				} else if(typeof val == 'boolean') {
 					return tmp === 'true'
-				} else {
+				} else if(tmp) {
 					return JSON.parse(tmp) || val
+				} else {
+					return val
 				}
-			} else {
+			} else if(val) {
 				cb.setStorageSync(key, val)
 				return val
 			}
