@@ -111,7 +111,23 @@ if(typeof uni == 'object') {
 		})
 	}
 	cb.getStorageSync = (key, val) => {
-		return uni.getStorageSync(key) || val
+		let tmp = uni.getStorageSync(key)
+		if(tmp) {
+			if(typeof val == 'string') {
+				return tmp
+			} else if(typeof val == 'number') {
+				return parseFloat(tmp) || val
+			} else if(typeof val == 'boolean') {
+				return tmp === 'true'
+			} else if(val == undefined) {
+				return tmp
+			} else {
+				return JSON.parse(tmp) || tmp
+			}
+		} else if(val) {
+			cb.setStorageSync(key, val)
+			return val
+		}
 	}
 	cb.setStorageSync = (key, val) => {
 		return uni.setStorageSync(key, val)
@@ -147,10 +163,10 @@ if(typeof uni == 'object') {
 					return parseFloat(tmp) || val
 				} else if(typeof val == 'boolean') {
 					return tmp === 'true'
-				} else if(tmp) {
-					return JSON.parse(tmp) || val
+				} else if(val == undefined) {
+					return tmp
 				} else {
-					return val
+					return JSON.parse(tmp) || tmp
 				}
 			} else if(val) {
 				cb.setStorageSync(key, val)
