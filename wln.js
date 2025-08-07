@@ -1,4 +1,5 @@
 import sm2 from "./crypto/sm2.js"
+import sm3 from "./crypto/sm3.js";
 import sm4 from "./crypto/sm4.js"
 import cb from "./callback.js"
 //import base64js from "./crypto/base64.js"
@@ -97,6 +98,7 @@ function createWln(opts, callback) {
     wln.getStorageSync = (key, val) => { return cb.getStorageSync(key, val) }
     wln.setStorageSync = (key, val) => { return cb.setStorageSync(key, val) }
     wln.removeStorageSync = (key) => { return cb.removeStorageSync(key) }
+	wln.sm3encrypt = (str) => { return sm3.encryptStr(str) }
 	wln.ext = cb
 	
     /*

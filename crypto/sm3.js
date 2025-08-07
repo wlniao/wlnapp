@@ -1,3 +1,5 @@
+import utils from './utils'
+
 // 消息扩展
 const W = new Uint32Array(68)
 const M = new Uint32Array(64) // W'
@@ -163,9 +165,10 @@ function hmac(input, key) {
   const hash = sm3([...iPadKey, ...input])
   return sm3([...oPadKey, ...hash])
 }
-export default sm3
-
-// module.exports = {
-//   sm3,
-//   hmac,
-// }
+export default {
+  hmac,
+  encrypt: sm3,
+  encryptStr: (str) => {
+    return utils.arrayToHex(sm3(utils.utf8ToArray(str)))
+  }
+}
