@@ -49,7 +49,7 @@ textarea {resize:none}select,input,textarea{outline:none;-webkit-tap-highlight-c
 .wln-layout .has-left {position:absolute;left:168px;right:0;}
 .wln-table-layout {width:100%;height:100%;display:table;}
 .wln-table-cell {display:table-cell;vertical-align:top;}
-.wln-mask-layout {top:0;left:0;right:0;bottom:0;z-index:4;display:table-cell;position:fixed;text-align:center;vertical-align:middle;background:rgba(0,0,0,0.3);clear:both;}
+.wln-mask-layout {top:0;left:0;right:0;bottom:0;z-index:4;display:table-cell;position:fixed;text-align:center;vertical-align:middle;background:rgba(0,0,0,0.3);border:none;clear:both;}
 .wln-mask-body {margin:10% auto 0 auto;position:relative;background:#ffffff;display:inline-block;text-align:left;vertical-align:middle;}
 .wln-mask-head {font-size:18px;text-align:center;line-height:32px;margin-bottom:7px;border-bottom:1px solid #e8dddd;}
 .wln-mask-form {top:0;right:0;bottom:0;position:absolute;width:100%;min-width:300px;min-height:100%;text-align:left;background:#ffffff;overflow-y:auto}
