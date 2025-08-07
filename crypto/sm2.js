@@ -29,7 +29,7 @@ function doEncrypt(msg, publicKey, cipherMode = 1) {
   const y2 = _.hexToArray(_.leftPad(p.getY().toBigInteger().toRadix(16), 64))
 
   // c3 = hash(x2 || msg || y2)
-  const c3 = _.arrayToHex(sm3([].concat(x2, msg, y2)))
+  const c3 = _.arrayToHex(sm3.encrypt([].concat(x2, msg, y2)))
   let ct = 1
   let offset = 0
   let t = [] // 256 位
@@ -37,7 +37,7 @@ function doEncrypt(msg, publicKey, cipherMode = 1) {
   const nextT = () => {
     // (1) Hai = hash(z || ct)
     // (2) ct++
-    t = sm3([...z, ct >> 24 & 0x00ff, ct >> 16 & 0x00ff, ct >> 8 & 0x00ff, ct & 0x00ff])
+    t = sm3.encrypt([...z, ct >> 24 & 0x00ff, ct >> 16 & 0x00ff, ct >> 8 & 0x00ff, ct & 0x00ff])
     ct++
     offset = 0
   }
@@ -85,7 +85,7 @@ function doDecrypt(encryptData, privateKey, cipherMode = 1, {
   const nextT = () => {
     // (1) Hai = hash(z || ct)
     // (2) ct++
-    t = sm3([...z, ct >> 24 & 0x00ff, ct >> 16 & 0x00ff, ct >> 8 & 0x00ff, ct & 0x00ff])
+    t = sm3.encrypt([...z, ct >> 24 & 0x00ff, ct >> 16 & 0x00ff, ct >> 8 & 0x00ff, ct & 0x00ff])
     ct++
     offset = 0
   }
@@ -100,7 +100,7 @@ function doDecrypt(encryptData, privateKey, cipherMode = 1, {
   }
 
   // c3 = hash(x2 || msg || y2)
-  const checkC3 = _.arrayToHex(sm3([].concat(x2, msg, y2)))
+  const checkC3 = _.arrayToHex(sm3.encrypt([].concat(x2, msg, y2)))
 
   if (checkC3 === c3.toLowerCase()) {
     return output === 'array' ? msg : _.arrayToUtf8(msg)
@@ -219,10 +219,10 @@ function getHash(hashHex, publicKey, userId = '1234567812345678') {
   data.unshift(entl & 0x00ff)
   data.unshift(entl >> 8 & 0x00ff)
 
-  const z = sm3(data)
+  const z = sm3.encrypt(data)
 
   // e = hash(z || msg)
-  return _.arrayToHex(sm3(z.concat(_.hexToArray(hashHex))))
+  return _.arrayToHex(sm3.encrypt(z.concat(_.hexToArray(hashHex))))
 }
 
 /**
