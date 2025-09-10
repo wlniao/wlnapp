@@ -2,6 +2,9 @@ import "./utility.js"
 const tips = 'Required custom callback method: '
 const cb = {
 	empty: () => { },
+	error: (msg) => {
+		console.log(tips + 'error: (msg)')
+	},
 	toast: (msg, type) => {
 		console.log(tips + 'toast: (msg, type)')
 	},
@@ -137,6 +140,9 @@ if(typeof uni == 'object') {
 	}
 } else if(typeof window == 'object') {
 	if(typeof history == 'object') {
+		cb.error =  (msg) => {
+			window.alert(msg)
+		}
 		cb.goback = (delta) => {
 			return history.back(delta || 1)
 		}
