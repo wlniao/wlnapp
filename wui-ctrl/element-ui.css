@@ -90,9 +90,10 @@ textarea {resize:none}select,input,textarea{outline:none;-webkit-tap-highlight-c
 .el-checkbox__label {padding-left:3px;}
 .el-checkbox + .el-checkbox {margin-left:0px;}
 .el-checkbox {margin-right:20px;}
+.el-form .el-input{flex: 1;}
 .el-form-item .wln-ext-label {margin-left:18px;margin-right:6px;}
 .el-form-item__label,.el-form-item .wln-ext-label {color:#606266;user-select:none}
-.el-form-item__content .edui-editor {line-height:20px;}
+.el-form-item__content {padding-right: 18px;}.el-form-item__content .edui-editor {line-height:20px;}
 .el-input:not(.el-select .el-input--suffix) .el-input__inner[readonly]{cursor:not-allowed;background-color:#fdfcfc;}
 .el-form-group {color:#9e9e9e;text-align:center;background:#efefef;line-height:25px;margin-bottom:22px;}
 .el-form-btns {position:sticky;bottom:0;z-index:1005;border-top:1px solid #f1f1f1;margin-bottom:0;padding:7px 0;background-color:rgba(255,255,255,0.8);}
@@ -119,8 +120,6 @@ textarea {resize:none}select,input,textarea{outline:none;-webkit-tap-highlight-c
 @media screen and (max-width:750px) {
   /* 移动端布局 */
   ::-webkit-scrollbar {width:0px; }
-  .wln-title {margin-top: 70px;}
+  .wln-title {margin-top: 64px;}
   .wln-tools {text-align: right;}
-  .el-form .el-input, .el-form .el-button:not(.el-button--small) {max-width: 60vw;}
-  .el-form *[class*="el-"] + *[class*="el-input"], .el-form *[class*="el-"] + .el-select, .el-form *[class*="el-"] + *[class*="el-date-editor"] {margin-top:8px !important; margin-left:0 !important}
 }
