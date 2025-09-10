@@ -121,7 +121,7 @@ function createWln(opts, callback) {
 			data = sm4.encrypt(token, typeof data === 'string' ? data : JSON.stringify(data));
 		}
 		cb.request('POST', wln.cfgs.api, path, data, headers, (res) => {
-			if(noAuth !== true && res.header && res.header['authify-state'] === 'false') {
+			if(noAuth !== true && (res.status == 401 || res.header && res.header['authify-state'] === 'false')) {
 				cb.loadingHide()
 				cb.noauth(res.data || {})
 			} else if(typeof callfn === 'function') {
