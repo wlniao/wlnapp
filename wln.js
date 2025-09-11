@@ -125,6 +125,12 @@ function createWln(opts, callback) {
 			if(noAuth !== true && (res.status == 401 || res.header && res.header['authify-state'] === 'false')) {
 				cb.loadingHide()
 				cb.noauth(res.data || {})
+			} else if(res.data && res.data.code == '301' && res.data.tips && res.data.message) {
+				wln.gourl(res.data.message)
+			} else if(res.data && res.data.code == '400' && res.data.tips && res.data.message) {
+				wln.error(res.data.message)
+			} else if(res.data && res.data.code != '200' && res.data.tips && res.data.message) {
+				wln.toast(res.data.message)
 			} else if(typeof callfn === 'function') {
 				if(encrypt && wln.cfgs.pk && res.data && res.data.data && typeof res.data.data === 'string')
 				{
