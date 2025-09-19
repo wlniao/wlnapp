@@ -1,10 +1,10 @@
 // 定义API响应接口
-export interface ApiResponse {
+export interface ApiResult<T = any> {
   success: boolean;
   message: string;
   code: string;
   tips?: boolean;
-  data?: any;
+  data?: T;
 }
 
 // 定义查询接口
@@ -31,7 +31,6 @@ export interface ModelJsType {
 
 // 为model.js模块提供类型声明
 declare module './model.js' {
-  import type { ModelJsType, Query, Pager } from './model.d.ts';
   export const mQuery: Query;
   export const mPager: Pager;
 }

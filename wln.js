@@ -1,5 +1,5 @@
 import sm2 from "./crypto/sm2.js"
-import sm3 from "./crypto/sm3.js";
+import sm3 from "./crypto/sm3.js"
 import sm4 from "./crypto/sm4.js"
 import cb from "./callback.js"
 //import base64js from "./crypto/base64.js"
