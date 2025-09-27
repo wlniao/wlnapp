@@ -9,9 +9,8 @@ export interface WlnInstance {
   gourl: (url: string, type?: any) => void;
   noauth: (obj?: any) => void;
   login: () => void;
-  tabto: (title: string, urlto: string) => void;
-  uploader: (path: string, accept?: string, fn?: (data: any) => void) => void;
   upload: (path: string, file: File, fn?: (data: any) => void, accept?: string) => void;
+  removeStorageSync: (key: string) => void;
   setStorageSync: (key: string, value: any) => void;
   getStorageSync: (key: string) => any;
 }
@@ -31,8 +30,6 @@ export interface WlnOption {
   gourl?: (url: string, type?: any) => void;
   noauth?: (obj?: any) => void;
   login?: () => void;
-  tabto?: (title: string, urlto: string) => void;
-  uploader?: (path: string, accept?: string, fn?: (data: any) => void) => void;
 }
 
 // 为wln.js模块提供类型声明
