@@ -1,35 +1,55 @@
 export interface WlnInstance {
-  api: (path: string, success?: (data: any) => void, error?: (err: any) => void, option?: any, notLoading?: boolean, notAuth?: boolean) => void;
+  cfgs: WlnConfig;
+  empty: () => void;
   error: (msg: string) => void;
+  login: () => void;
+  logout: () => void;
+  debug: (msg: string) => void;
   toast: (msg: string, type?: string | boolean) => void;
   alert: (msg: string, fnOk?: () => void) => void;
   confirm: (msg: string, fnYes?: () => void, fnNot?: () => void, txtYes?: string, txtNot?: string) => void;
-  loadingHide: () => void;
-  loadingShow: (msg?: string) => any;
-  gourl: (url: string, type?: any) => void;
-  noauth: (obj?: any) => void;
-  login: () => void;
-  upload: (path: string, file: File, fn?: (data: any) => void, accept?: string) => void;
-  removeStorageSync: (key: string) => void;
-  setStorageSync: (key: string, value: any) => void;
-  getStorageSync: (key: string) => any;
+  prompt: (msg: string, fnYes?: () => void, fnNot?: () => void, txtYes?: string, txtNot?: string, inputTips?: string) => void;
+  gourl: (url: string, type?: any) => string | void;
+  goback: (delta?: number) => string | void;
+  loadingShow: (title?: string) => any;
+  loadingHide: () => any;
+  getStorageSync: (key: string, val?: any) => any;
+  setStorageSync: (key: string, val: any) => any;
+  removeStorageSync: (key: string) => any;
+  sm3encrypt: (str: string) => string;
+  api: (path: string, callfn?: (data: any) => void, data?: any, encrypt?: boolean, noAuth?: boolean, failfn?: (err: any) => void) => void;
+  upload: (path: string, file: File, callfn?: (data: any) => void, filter?: string) => void;
+  ext: any;
 }
 
 export interface WlnConfig {
-  api: string;
   pk: string;
+  api: string;
+  debug?: boolean;
+  color?: string;
+  bgColor?: string;
+  headers?: Record<string, string>;
 }
 
 export interface WlnOption {
+  empty?: () => void;
   error?: (msg: string) => void;
+  login?: () => void;
+  logout?: () => void;
+  debug?: (msg: string) => void;
   toast?: (msg: string, type?: string | boolean) => void;
   alert?: (msg: string, fnOk?: () => void) => void;
   confirm?: (msg: string, fnYes?: () => void, fnNot?: () => void, txtYes?: string, txtNot?: string) => void;
-  loadingHide?: () => void;
-  loadingShow?: (msg?: string) => any;
-  gourl?: (url: string, type?: any) => void;
-  noauth?: (obj?: any) => void;
-  login?: () => void;
+  prompt?: (msg: string, fnYes?: () => void, fnNot?: () => void, txtYes?: string, txtNot?: string, inputTips?: string) => void;
+  gourl?: (url: string, type?: any) => string | void;
+  goback?: (delta?: number) => string | void;
+  loadingShow?: (title?: string) => any;
+  loadingHide?: () => any;
+  getStorageSync?: (key: string, val?: any) => any;
+  setStorageSync?: (key: string, val: any) => any;
+  removeStorageSync?: (key: string) => any;
+  request?: (method: string, baseUrl: string, path: string, data: any, headers: Record<string, string>, success: (res: any) => void, fail: (err: any) => void) => void;
+  upload?: (filter: string, baseUrl: string, path: string, file: File, headers: Record<string, string>, success: (res: any) => void, fail: (err: any) => void) => void;
 }
 
 // 为wln.js模块提供类型声明
@@ -37,7 +57,8 @@ declare module './wln.js' {
   export default function createWln(config: WlnConfig, option?: WlnOption): WlnInstance
 }
 
-export default createWln;
+// 导出createWln函数的类型
+export default function createWln(config: WlnConfig, option?: WlnOption): WlnInstance;
 
 // 全局组件类型声明
 declare module '@vue/runtime-core' {

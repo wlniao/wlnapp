@@ -1,74 +1,142 @@
 # wlnapp
 
-### Usage
+A frontend framework for web applications with encryption capabilities, including SM2/SM3/SM4 cryptographic algorithms.
+
+## Installation
+
+```bash
+npm install wlnapp
 ```
+
+## Usage
+
+### As a submodule
+
+```bash
 git submodule add https://gitee.com/wlniao/wlnapp.git ./src/wlnapp
 ```
 
-### 安装npm包
+### As an NPM package
+
+```javascript
+import createWln from 'wlnapp';
+
+const wln = createWln({
+  api: 'https://your-api-endpoint.com',
+  pk: 'your-public-key'
+});
+
+// Use the wln instance
+wln.api('/your/api/path', (data) => {
+  console.log(data);
+});
 ```
-npm install jsbn
+
+## Features
+
+- SM2/SM3/SM4 encryption algorithms
+- API request handling with encryption support
+- Cross-platform compatibility (UniApp, Web, etc.)
+- Mock data support for development
+- TypeScript support
+
+## API
+
+### createWln(config, callbacks)
+
+Create a wln instance with the given configuration.
+
+```javascript
+const wln = createWln({
+  api: 'https://your-api-endpoint.com',
+  pk: 'your-public-key',
+  debug: false
+}, {
+  // Custom callback implementations
+  toast: (msg, type) => { /* your implementation */ },
+  alert: (msg, fnOk) => { /* your implementation */ }
+});
 ```
-### 目录结构
+
+### wln.api(path, success, data, encrypt, noAuth, fail)
+
+Make an API request.
+
+```javascript
+wln.api('/user/profile', (data) => {
+  console.log(data);
+}, { id: 123 }, true, false, (error) => {
+  console.error(error);
+});
+```
+
+## Directory Structure
 
 ```
 .
 ├── src/
-│   ├── assets/         # 静态资源
-│   ├── components/     # 公共组件
-│   ├── layout/         # 布局组件
-│   ├── pages/          # 页面组件
-│   ├── types/          # TypeScript类型定义
-│   ├── wlnapp/         # 核心功能模块
-│   │   ├── crypto/         # 前端数据加密模块
-│   │   ├── wui-ctrl/       # 管理后台UI通用内容
-│   │   ├── callback.js     # 核心类支持的默认调用方法
-│   │   ├── model.js        # 通用的后端数据响应类型
-│   │   └── wln.js          # 核心功能模块
-│   ├── mock/           # Mock数据目录
-│   │   ├── authInfo.js     # /Appx/AuthInfo接口mock数据
-│   │   ├── template.js     # Mock数据模板文件
-│   │   └── ...             # 其他模块的mock数据
-│   ├── App.vue         # 根组件
-│   └── main.ts         # 入口文件
-├── public/             # 静态资源
-└── ...                 # 配置文件等
+│   ├── assets/         # Static assets
+│   ├── components/     # Common components
+│   ├── layout/         # Layout components
+│   ├── pages/          # Page components
+│   ├── types/          # TypeScript type definitions
+│   ├── wlnapp/         # Core functionality modules
+│   │   ├── crypto/         # Frontend encryption modules
+│   │   ├── wui-ctrl/       # Admin UI common content
+│   │   ├── callback.js     # Default callback methods
+│   │   ├── model.js        # Common backend response types
+│   │   └── wln.js          # Core functionality module
+│   ├── mock/           # Mock data directory
+│   │   ├── authInfo.js     # /Appx/AuthInfo interface mock data
+│   │   ├── template.js     # Mock data template file
+│   │   └── ...             # Other module mock data
+│   ├── App.vue         # Root component
+│   └── main.ts         # Entry file
+├── public/             # Static assets
+└── ...                 # Configuration files
 ```
 
+## Enabling Mock Functionality
 
-### 开启Mock功能
-引用Mock模块
-```
-import mock from './wlnapp/mock.js'
+Import the mock module:
+
+```javascript
+import mock from 'wlnapp/mock';
 ```
 
-添加Mock处理逻辑
-```
-// 如果是mock模式，重写wln.api方法以优先使用mock数据
+Add mock handling logic:
+
+```javascript
+// If in mock mode, override wln.api to use mock data first
 if (wln.getStorageSync('mock') === 'true' || (import.meta as any).env?.VITE_MOCK === 'true') {
   mock.init('/cloud/service', 'mock');
-  const originalApi = wln.api; // 保存原始的wln.api方法，mock失败时调用原始方法
+  const originalApi = wln.api; // Save the original wln.api method, call it when mock fails
   wln.api = (path, callfn, data, encrypt, noAuth, failfn) => {
     return mock.mockApi(path, callfn, data, encrypt, noAuth, failfn, originalApi, 300);
   };
 }
 ```
 
-添加mock目录并添加数据文件template.js
-```
+Add a mock directory and data file template.js:
+
+```javascript
 /**
- * Mock数据模板文件
- * 复制此文件来创建新的mock数据模块
+ * Mock data template file
+ * Copy this file to create new mock data modules
  */
 
 export default {
   '/your/api/path': {
     success: true,
-    message: '请求成功',
+    message: 'Request successful',
     code: '200',
     data: {
-      // 你的数据
+      // Your data
     }
   }
 };
 ```
+
+## License
+
+MIT

@@ -20,11 +20,11 @@ export function init() {
     const modules = import.meta.glob('../mock/*.js', { eager: true, import: 'default' });
     // 遍历所有模块并注册mock数据
     Object.keys(modules).forEach((modulePath) => {
-        const module = modules[modulePath];
-        // 将模块中的每个路径都注册到mock数据中
-        Object.keys(module).forEach((path) => {
-            setMockData(path, module[path]);
-        });
+      const module = modules[modulePath];
+      // 将模块中的每个路径都注册到mock数据中
+      Object.keys(module).forEach((path) => {
+        setMockData(path, module[path]);
+      });
     });
 
   } catch (error) {
