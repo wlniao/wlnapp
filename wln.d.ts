@@ -60,6 +60,10 @@ declare module './wln.js' {
 // 导出createWln函数的类型
 export default function createWln(config: WlnConfig, option?: WlnOption): WlnInstance;
 
+// 从model模块重新导出类型
+export type { ApiResult, Query, Pager } from './model.d.ts';
+export { mQuery, mPager } from './model.js';
+
 // 全局组件类型声明
 declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
