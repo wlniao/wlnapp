@@ -136,7 +136,7 @@ function ShowTime(time, formatString) {
   }
 }
 Number.prototype.showTime = function(formatString) {
-  return ShowTime(this, formatString);
+  return this > 0 ? ShowTime(this, formatString) : '';
 };
 String.prototype.showTime = function(formatString) {
   return ShowTime(this, formatString);
