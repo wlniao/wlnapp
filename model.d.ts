@@ -1,10 +1,9 @@
-// 定义API响应接口
-export interface ApiResult<T = any> {
-  success: boolean;
-  message: string;
-  code: string;
-  tips?: boolean;
-  data?: T;
+// 定义数据返回内容
+export interface Result<T = any> {
+  Success: boolean;
+  Message: string;
+  Code: number;
+  Data?: T;
 }
 
 // 定义查询接口

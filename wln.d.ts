@@ -19,6 +19,7 @@ export interface WlnInstance {
   sm3encrypt: (str: string) => string;
   api: (path: string, callfn?: (data: any) => void, data?: any, encrypt?: boolean, noAuth?: boolean, failfn?: (err: any) => void) => void;
   upload: (path: string, file: File, callfn?: (data: any) => void, filter?: string) => void;
+  request: (path: string, data?: any, encrypt?: boolean, noAuth?: boolean) => any;
   ext: any;
 }
 
@@ -48,7 +49,7 @@ export interface WlnOption {
   getStorageSync?: (key: string, val?: any) => any;
   setStorageSync?: (key: string, val: any) => any;
   removeStorageSync?: (key: string) => any;
-  request?: (method: string, baseUrl: string, path: string, data: any, headers: Record<string, string>, success: (res: any) => void, fail: (err: any) => void) => void;
+  fetch?: (method: string, baseUrl: string, path: string, data: any, headers: Record<string, string>, success: (res: any) => void, fail: (err: any) => void) => void;
   upload?: (filter: string, baseUrl: string, path: string, file: File, headers: Record<string, string>, success: (res: any) => void, fail: (err: any) => void) => void;
 }
 
@@ -61,7 +62,7 @@ declare module './wln.js' {
 export default function createWln(config: WlnConfig, option?: WlnOption): WlnInstance;
 
 // 从model模块重新导出类型
-export type { ApiResult, Query, Pager } from './model.d.ts';
+export type { Result, Query, Pager } from './model.d.ts';
 export { mQuery, mPager } from './model.js';
 
 // 全局组件类型声明

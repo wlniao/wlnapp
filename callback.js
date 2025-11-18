@@ -17,7 +17,7 @@ const cb = {
   prompt: (msg, fnYes, fnNot, txtYes, txtNot, inputTips) => {
     console.log(tips + 'prompt: (msg, fnYes, fnNot, txtYes, txtNot, inputTips)');
   },
-  request: (method, host, path, data, headers, fnYes, fnNot) => {
+  fetch: (method, host, path, data, headers, fnYes, fnNot) => {
     console.log(tips + 'request: (method, host, path, data, headers, fnYes, fnNot)');
   },
   upload: (filter, host, path, file, headers, fnYes, fnNot) => {
@@ -82,12 +82,12 @@ if(typeof uni == 'object') {
       return uni.navigateTo({ url: url });
     }
   };
-  cb.request = (method, host, path, data, headers, fnYes, fnNot) => {
+  cb.fetch = (method, host, path, data, headers, fnYes, fnNot) => {
     return uni.request({
       url: host + path, data: data || {}, method: method,
       header: headers,
       success: res => {
-        fnYes(res);
+        fnYes({data: res.data, status: res.status, statusText: 'Ok'});
       },
       fail: res => {
         fnNot(res);
@@ -102,14 +102,14 @@ if(typeof uni == 'object') {
       filePath: file.url,
       formData: { filter: filter },
       success: (res) => {
-        if(res.statusCode != 200 && res.errMsg) {
-          fnNot({success: false, message: 'error: ' + res.statusCode });
+        if(res.statusCode != 200) {
+          fnYes({ status: res.statusCode, data: res.errMsg, headers: [] });		
         } else {
-          fnYes(JSON.parse(res.data));					
+          fnYes({ status: res.statusCode, data: res.data, headers: [] });					
         }
       },
       fail:(e) => {
-        fnNot({success: false, message: e.errMsg });
+        fnNot(e.errMsg);
       }
     });
   };
@@ -195,17 +195,18 @@ if(typeof uni == 'object') {
     };
   }
   if(typeof fetch == 'function') {
-    cb.request = (method, host, path, data, headers, fnYes, fnNot) => {
+    cb.fetch = (method, host, path, data, headers, fnYes, fnNot) => {
       let obj = { header: { } };
       fetch(host + path, { method: method, headers: headers, body: typeof data === 'string' ? data : JSON.stringify(data) }).then((res) => {
         res.headers.forEach((val, key) => { obj.header[key] = val; });
         obj.status = res.status;
-        return res.json();
+        obj.statusText = res.statusText;
+        return res.text();
       }).then((res) => {
         obj.data = res;
         fnYes(obj);
-      }).catch((error) => {
-        fnNot({success: false, message: error });
+      }).catch((err) => {
+        fnNot(err.message);
       });
     };
     cb.upload = (filter, host, path, file, headers, fnYes, fnNot) => {

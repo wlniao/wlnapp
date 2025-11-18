@@ -103,6 +103,69 @@ function createWln(opts, callback) {
   wln.ext = cb;
 	
   /*
+    方法说明：发起API请求并返回Promise
+    参数说明：
+    path:       请求路径（或URL）
+    data:       向API接口Post的数据
+    encrypt:    true/false，是否需要加密传输，默认为false
+    noAuth:     true/false，此API接口是否免authorization验证，默认为false
+    */
+  wln.request = (path, data, encrypt, noAuth) => {
+    return new Promise((resolve, reject) => {
+      let token = ''.randomString(16);
+      let headers = { authorization: wln.getStorageSync('ticket') || '', 'x-domain': wln.getStorageSync('x-domain') || '', 'locale': wln.getStorageSync('locale') || '' };
+      if (wln.cfgs.headers) { for(let i in wln.cfgs.headers) { headers[i] = wln.cfgs.headers[i]; } }
+      if(data && encrypt && wln.cfgs.pk)
+      {
+        if(wln.cfgs.debug) { wln.debug(data); }
+        headers['sm2token'] = sm2.doEncrypt(token, wln.cfgs.pk, 1); // 1 - C1C3C2，0 - C1C2C3，默认为1
+        data = sm4.encrypt(token, typeof data === 'string' ? data : JSON.stringify(data));
+      }
+      cb.fetch('POST', wln.cfgs.api, path, data, headers, (res) => {
+        if(res.data && typeof res.data === 'string')
+        {
+          if(res.data[0] == '[' || res.data[0] == '{' || res.data[0] == '"')
+          {
+            res.data = JSON.parse(res.data)
+          }
+          else if(encrypt && wln.cfgs.pk && token)
+          {
+            res.data = JSON.parse(sm4.decrypt(token, res.data))
+            if(wln.cfgs.debug)
+            {
+              wln.debug(res.data)
+            }
+          }
+        }
+        if(noAuth !== true && (res.status == 401 || res.header['www-authenticate'])) {
+          reject(res.data || {})
+          cb.noauth(res.data)
+        } else if (res.status == 301) {
+          reject(res.data || {})
+          if(typeof res.header['location'] === 'string') { wln.gourl(res.header['location']) }
+        } else if (res.status != 200) {
+          reject(res.data || {})
+          if(res.data) {
+            if(typeof res.data === 'string') { wln.toast(res.data) }
+            else if(res.data.message) { wln.toast(res.data.message) }
+          } else if(res.statusText) { wln.toast(res.statusText, false) }
+        } else {
+          resolve(new Promise((resolve, reject) => {
+            if(res.data.Code == 200) {
+              resolve(res.data.Data)
+            } else {
+              reject(res.data)
+            }
+          }))
+        }
+      }, (err) => {
+        wln.toast('Error: ' + err, false)
+        reject({})
+      })
+    })
+  };
+
+  /*
     方法说明：发起API请求
     参数说明：
     path:       请求路径（或URL）
@@ -122,46 +185,41 @@ function createWln(opts, callback) {
       headers['sm2token'] = sm2.doEncrypt(token, wln.cfgs.pk, 1); // 1 - C1C3C2，0 - C1C2C3，默认为1
       data = sm4.encrypt(token, typeof data === 'string' ? data : JSON.stringify(data));
     }
-    cb.request('POST', wln.cfgs.api, path, data, headers, (res) => {
-      if(noAuth !== true && (res.status == 401 || res.header && res.header['authify-state'] === 'false')) {
-        cb.loadingHide();
-        cb.noauth(res.data || {});
-      } else if(res.data && res.data.code == '301' && res.data.tips && res.data.message) {
-        wln.gourl(res.data.message);
-      } else if(res.data && res.data.code == '400' && res.data.tips && res.data.message) {
-        wln.error(res.data.message);
-      } else if(res.data && res.data.code != '200' && res.data.tips && res.data.message) {
-        wln.toast(res.data.message);
-      } else if(typeof callfn === 'function') {
-        if(encrypt && wln.cfgs.pk && res.data && res.data.data && typeof res.data.data === 'string')
+    cb.fetch('POST', wln.cfgs.api, path, data, headers, (res) => {
+      if(typeof res.data === 'string')
+      {
+        if(res.data[0] == '[' || res.data[0] == '{' || res.data[0] == '"')
         {
-          let plain = '';
-          try
-          {
-            plain = sm4.decrypt(token, res.data.data);
-            if(plain && (plain[0] == '[' || plain[0] == '{'))
-            {
-              res.data.data = JSON.parse(plain);
-            }
-            else
-            {
-              res.data.data = plain;
-            }
-          } catch (e) { 
-            // 忽略解密错误
-          }
-          if(wln.cfgs.debug) { wln.debug(res.data); }
+          res.data = JSON.parse(res.data)
         }
-        callfn(res.data);
+        else if(encrypt && wln.cfgs.pk && token)
+        {
+          res.data = JSON.parse(sm4.decrypt(token, res.data))
+          if(wln.cfgs.debug)
+          {
+            wln.debug(res.data)
+          }
+        }
+      }
+      if(noAuth !== true && (res.status == 401 || (res.header && res.header['www-authenticate']))) {
+        cb.noauth(res.data)
+      } else if(res.status == 400 && res.data) {
+        wln.error(res.data.message || res.data)
+      } else if(res.data.message || res.status == 301 && res.data) {
+        wln.gourl(res.data.message || res.data)
+      } else if(res.status != 200 && res.data) {
+        wln.toast(res.data.message || res.data)
+      } else if(typeof callfn === 'function') {
+        callfn(res.data)
       }
     }, (err) => {
       cb.loadingHide();
       if(failfn) {
         failfn(err); //执行自定义回调函数
       } else {
-        cb.toast('请求数据失败，请稍后再试');
+        cb.toast('请求数据失败，请稍后再试')
       }
-    });
+    })
   };
   wln.upload = (path, file, callfn, filter) => {
     let headers = { authorization: wln.getStorageSync('ticket') || '', 'x-domain': wln.getStorageSync('x-domain') || '' };

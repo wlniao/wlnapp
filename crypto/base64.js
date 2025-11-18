@@ -182,3 +182,34 @@ export function byteLength(b64) {
   var placeHoldersLen = lens[1];
   return byteLength(validLen, placeHoldersLen);
 }
+
+/**
+ * 将字符串编码为Base64格式
+ * @param {string} str - 要编码的字符串
+ * @returns {string} - Base64编码后的字符串
+ */
+export function encodeString(str) {
+  // 将字符串转换为UTF-8字节数组
+  var utf8Bytes = [];
+  for (var i = 0; i < str.length; i++) {
+    var charCode = str.charCodeAt(i);
+    if (charCode < 0x80) {
+      utf8Bytes.push(charCode);
+    } else if (charCode < 0x800) {
+      utf8Bytes.push(0xC0 | (charCode >> 6));
+      utf8Bytes.push(0x80 | (charCode & 0x3F));
+    } else if (charCode < 0x10000) {
+      utf8Bytes.push(0xE0 | (charCode >> 12));
+      utf8Bytes.push(0x80 | ((charCode >> 6) & 0x3F));
+      utf8Bytes.push(0x80 | (charCode & 0x3F));
+    } else {
+      utf8Bytes.push(0xF0 | (charCode >> 18));
+      utf8Bytes.push(0x80 | ((charCode >> 12) & 0x3F));
+      utf8Bytes.push(0x80 | ((charCode >> 6) & 0x3F));
+      utf8Bytes.push(0x80 | (charCode & 0x3F));
+    }
+  }
+  
+  // 使用现有的fromByteArray函数进行Base64编码
+  return fromByteArray(utf8Bytes);
+}
