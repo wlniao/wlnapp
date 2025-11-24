@@ -84,9 +84,9 @@ function createWln(opts, callback) {
   if (opts && typeof opts == 'object') { for (let k in opts) { wln.cfgs[k] = opts[k]; } } //设置配置内容
   if (callback != undefined) { for (let k in callback) { cb[k] = callback[k]; } } //重载回调方法
   wln.empty = () => { cb.empty(); };
-  wln.error = (msg) => { cb.error(msg); };
   wln.login = () => { cb.login(); };
   wln.logout = () => { cb.logout(); };
+  wln.error = (msg) => { cb.error(msg); };
   wln.debug = (msg) => { if(wln.debug && msg) { console.debug(msg); } };
   wln.toast = (msg, type) => { cb.toast(msg, type); };
   wln.alert = (msg, fnOk) => { cb.alert(msg, fnOk || cb.empty ); };
@@ -138,20 +138,23 @@ function createWln(opts, callback) {
           }
         }
         if(noAuth !== true && (res.status == 401 || res.header['www-authenticate'])) {
-          reject(res.data || {})
           cb.noauth(res.data)
+          reject(res.data || {})
         } else if (res.status == 301) {
-          reject(res.data || {})
           if(typeof res.header['location'] === 'string') { wln.gourl(res.header['location']) }
-        } else if (res.status != 200) {
           reject(res.data || {})
+        } else if (res.status != 200) {
           if(res.data) {
             if(typeof res.data === 'string') { wln.toast(res.data) }
             else if(res.data.message) { wln.toast(res.data.message) }
           } else if(res.statusText) { wln.toast(res.statusText, false) }
+          reject(res.data || {})
         } else {
           resolve(new Promise((resolve, reject) => {
             if(res.data.Code == 200) {
+              if(res.data.Message) {
+                wln.toast(res.data.Message, true)
+              }
               resolve(res.data.Data)
             } else {
               reject(res.data)

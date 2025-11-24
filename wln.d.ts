@@ -1,9 +1,9 @@
 export interface WlnInstance {
   cfgs: WlnConfig;
   empty: () => void;
-  error: (msg: string) => void;
   login: () => void;
   logout: () => void;
+  error: (msg: any) => void;
   debug: (msg: string) => void;
   toast: (msg: string, type?: string | boolean) => void;
   alert: (msg: string, fnOk?: () => void) => void;
