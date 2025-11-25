@@ -19,7 +19,7 @@ export interface WlnInstance {
   sm3encrypt: (str: string) => string;
   api: (path: string, callfn?: (data: any) => void, data?: any, encrypt?: boolean, noAuth?: boolean, failfn?: (err: any) => void) => void;
   upload: (path: string, file: File, callfn?: (data: any) => void, filter?: string) => void;
-  request: (path: string, data?: any, encrypt?: boolean, noAuth?: boolean) => any;
+  fetch: (path: string, data?: any, encrypt?: boolean, noAuth?: boolean) => any;
   ext: any;
 }
 

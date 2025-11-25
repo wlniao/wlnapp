@@ -107,15 +107,21 @@ function createWln(opts, callback) {
     参数说明：
     path:       请求路径（或URL）
     data:       向API接口Post的数据
-    encrypt:    true/false，是否需要加密传输，默认为false
-    noAuth:     true/false，此API接口是否免authorization验证，默认为false
+    opts:       请求配置：unpack、plaintext
     */
-  wln.request = (path, data, encrypt, noAuth) => {
+  wln.fetch = (path, data, opts) => {
+    if(opts == undefined)
+    {
+      opts = {
+        unpack: false, //true/false，是否直接返回res.data，默认为false
+        plaintext: false //true/false，是否强制明文传输，默认为false
+      }
+    }
     return new Promise((resolve, reject) => {
       let token = ''.randomString(16);
       let headers = { authorization: wln.getStorageSync('ticket') || '', 'x-domain': wln.getStorageSync('x-domain') || '', 'locale': wln.getStorageSync('locale') || '' };
       if (wln.cfgs.headers) { for(let i in wln.cfgs.headers) { headers[i] = wln.cfgs.headers[i]; } }
-      if(data && encrypt && wln.cfgs.pk)
+      if(data && !opts.plaintext && wln.cfgs.pk)
       {
         if(wln.cfgs.debug) { wln.debug(data); }
         headers['sm2token'] = sm2.doEncrypt(token, wln.cfgs.pk, 1); // 1 - C1C3C2，0 - C1C2C3，默认为1
@@ -128,7 +134,7 @@ function createWln(opts, callback) {
           {
             res.data = JSON.parse(res.data)
           }
-          else if(encrypt && wln.cfgs.pk && token)
+          else if(!opts.plaintext && wln.cfgs.pk && token)
           {
             res.data = JSON.parse(sm4.decrypt(token, res.data))
             if(wln.cfgs.debug)
@@ -137,7 +143,7 @@ function createWln(opts, callback) {
             }
           }
         }
-        if(noAuth !== true && (res.status == 401 || res.header['www-authenticate'])) {
+        if(res.status == 401 || res.header['www-authenticate']) {
           cb.noauth(res.data)
           reject(res.data || {})
         } else if (res.status == 301) {
@@ -147,11 +153,19 @@ function createWln(opts, callback) {
           if(res.data) {
             if(typeof res.data === 'string') { wln.toast(res.data) }
             else if(res.data.message) { wln.toast(res.data.message) }
-          } else if(res.statusText) { wln.toast(res.statusText, false) }
-          reject(res.data || {})
+            reject(res.data)
+          } else if(res.statusText) {
+            wln.toast(res.statusText, false)
+            reject({ Code: res.status, Message: res.statusText })
+          } else {
+            reject({ Code: res.status })
+          }
         } else {
           resolve(new Promise((resolve, reject) => {
-            if(res.data.Code == 200) {
+            if (opts.unpack) {
+              //不解包直接返回
+              resolve(res.data)
+            } else if (res.data.Code == 200) {
               if(res.data.Message) {
                 wln.toast(res.data.Message, true)
               }
