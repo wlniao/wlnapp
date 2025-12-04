@@ -107,15 +107,20 @@ function createWln(opts, callback) {
     参数说明：
     path:       请求路径（或URL）
     data:       向API接口Post的数据
-    opts:       请求配置：unpack、plaintext
+    opts:       请求配置：unpack、plaintext、loading
     */
   wln.fetch = (path, data, opts) => {
     if(opts == undefined)
     {
       opts = {
         unpack: false, //true/false，是否直接返回res.data，默认为false
-        plaintext: false //true/false，是否强制明文传输，默认为false
+        plaintext: false, //true/false，是否强制明文传输，默认为false
+        loading: false //true/false，是否自动调用wln.loadingShow，默认为false
       }
+    }
+    if (opts.loading) {
+      // 调用Loading显示，指定文本时显示Loading文本
+      typeof opts.loading === 'string' ? wln.loadingShow(opts.loading) : wln.loadingShow();
     }
     return new Promise((resolve, reject) => {
       let token = ''.randomString(16);
@@ -128,6 +133,9 @@ function createWln(opts, callback) {
         data = sm4.encrypt(token, typeof data === 'string' ? data : JSON.stringify(data));
       }
       cb.fetch('POST', wln.cfgs.api, path, data, headers, (res) => {
+        if (opts.loading) {
+          new Promise((resolve, reject) => { wln.loadingHide(); setTimeout(resolve, 20); }).then(() => {})
+        }
         if(res.data && typeof res.data === 'string')
         {
           if(res.data[0] == '[' || res.data[0] == '{' || res.data[0] == '"')
@@ -179,6 +187,9 @@ function createWln(opts, callback) {
           }))
         }
       }, (err) => {
+        if (opts.loading) {
+          new Promise((resolve, reject) => { wln.loadingHide(); setTimeout(resolve, 20); }).then(() => {})
+        }
         wln.toast('Error: ' + err, false)
         reject({})
       })
