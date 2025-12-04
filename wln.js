@@ -160,6 +160,9 @@ function createWln(opts, callback) {
           } else {
             reject({ Code: res.status })
           }
+        } else if (res.data && !res.data.Code && !res.data.Message && res.data.message && res.data.code && res.data.code != 200) {
+          wln.toast(res.data.message)
+          reject(res.data)
         } else {
           resolve(new Promise((resolve, reject) => {
             if (opts.unpack) {
