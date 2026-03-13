@@ -157,7 +157,7 @@ function createWln(opts, callback) {
         } else if (res.status == 301) {
           if(res.header && typeof res.header['location'] === 'string') { wln.gourl(res.header['location']) }
           reject(res.data || {})
-        } else if (res.status != 200) {
+        } else if (res.status != 200 && res.status) {
           if(res.data) {
             if(typeof res.data === 'string') { wln.toast(res.data) }
             else if(res.data.message) { wln.toast(res.data.message) }
