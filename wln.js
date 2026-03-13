@@ -151,11 +151,11 @@ function createWln(opts, callback) {
             }
           }
         }
-        if(res.status == 401 || res.header['www-authenticate']) {
+        if(res.status == 401 || (res.header && res.header['www-authenticate'])) {
           cb.noauth(res.data)
           reject(res.data || {})
         } else if (res.status == 301) {
-          if(typeof res.header['location'] === 'string') { wln.gourl(res.header['location']) }
+          if(res.header && typeof res.header['location'] === 'string') { wln.gourl(res.header['location']) }
           reject(res.data || {})
         } else if (res.status != 200) {
           if(res.data) {
