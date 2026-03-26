@@ -168,15 +168,23 @@ function createWln(opts, callback) {
           } else {
             reject({ Code: res.status })
           }
-        } else if (res.data && !res.data.Code && !res.data.Message && res.data.message && res.data.code && res.data.code != 200) {
+        } else if (res.data && res.data.message && res.data.code && res.data.code != 200) {
           wln.toast(res.data.message)
+          reject(res.data)
+        } else if (res.data && res.data.Message && res.data.Code && res.data.Code != 200) {
+          wln.toast(res.data.Message)
           reject(res.data)
         } else {
           resolve(new Promise((resolve, reject) => {
             if (opts.unpack) {
               //不解包直接返回
               resolve(res.data)
-            } else if (res.data.Code == 200) {
+            } else if (res.data.data && res.data.code == 200) {
+              if(res.data.message) {
+                wln.toast(res.data.message, true)
+              }
+              resolve(res.data.data)
+            } else if (res.data.Data && res.data.Code == 200) {
               if(res.data.Message) {
                 wln.toast(res.data.Message, true)
               }
