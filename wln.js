@@ -113,6 +113,7 @@ function createWln(opts, callback) {
     if(opts == undefined)
     {
       opts = {
+        toast: true, //true/false，是否启用错误信息toast显示
         unpack: false, //true/false，是否直接返回res.data，默认为false
         plaintext: false, //true/false，是否强制明文传输，默认为false
         loading: false //true/false，是否自动调用wln.loadingShow，默认为false
@@ -159,20 +160,20 @@ function createWln(opts, callback) {
           reject(res.data || {})
         } else if (res.status != 200 && res.status) {
           if(res.data) {
-            if(typeof res.data === 'string') { wln.toast(res.data) }
-            else if(res.data.message) { wln.toast(res.data.message) }
+            if(typeof res.data === 'string') { opts.toast && wln.toast(res.data) }
+            else if(res.data.message && opts.toast) { wln.toast(res.data.message) }
             reject(res.data)
           } else if(res.statusText) {
-            wln.toast(res.statusText, false)
+            opts.toast && wln.toast(res.statusText, false)
             reject({ Code: res.status, Message: res.statusText })
           } else {
             reject({ Code: res.status })
           }
         } else if (res.data && res.data.message && res.data.code && res.data.code != 200) {
-          wln.toast(res.data.message)
+          opts.toast && wln.toast(res.data.message)
           reject(res.data)
         } else if (res.data && res.data.Message && res.data.Code && res.data.Code != 200) {
-          wln.toast(res.data.Message)
+          opts.toast && wln.toast(res.data.Message)
           reject(res.data)
         } else {
           resolve(new Promise((resolve, reject) => {
@@ -180,14 +181,10 @@ function createWln(opts, callback) {
               //不解包直接返回
               resolve(res.data)
             } else if (res.data.data && res.data.code == 200) {
-              if(res.data.message) {
-                wln.toast(res.data.message, true)
-              }
+              opts.toast && res.data.message && wln.toast(res.data.message, true)
               resolve(res.data.data)
             } else if (res.data.Data && res.data.Code == 200) {
-              if(res.data.Message) {
-                wln.toast(res.data.Message, true)
-              }
+              opts.toast && res.data.message && wln.toast(res.data.Message, true)
               resolve(res.data.Data)
             } else {
               reject(res.data)
@@ -198,7 +195,7 @@ function createWln(opts, callback) {
         if (opts.loading) {
           new Promise((resolve, reject) => { wln.loadingHide(); setTimeout(resolve, 20); }).then(() => {})
         }
-        wln.toast('Error: ' + err, false)
+        opts.toast && wln.toast('Error: ' + err, false)
         reject({})
       })
     })
