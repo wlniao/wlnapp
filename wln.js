@@ -182,10 +182,10 @@ function createWln(opts, callback) {
               resolve(res.data)
             } else if (res.data.data && res.data.code == 200) {
               opts.toast && res.data.message && wln.toast(res.data.message, true)
-              resolve(res.data.data)
+              resolve(res.data.data || {})
             } else if (res.data.Data && res.data.Code == 200) {
-              opts.toast && res.data.message && wln.toast(res.data.Message, true)
-              resolve(res.data.Data)
+              opts.toast && res.data.Message && wln.toast(res.data.Message, true)
+              resolve(res.data.Data || {})
             } else {
               reject(res.data)
             }
