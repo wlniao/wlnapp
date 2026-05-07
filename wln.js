@@ -110,31 +110,32 @@ function createWln(opts, callback) {
     opts:       请求配置：unpack、plaintext、loading
     */
   wln.fetch = (path, data, opts) => {
-    if(opts == undefined)
-    {
-      opts = {
-        toast: true, //true/false，是否启用错误信息toast显示
-        unpack: false, //true/false，是否直接返回res.data，默认为false
-        plaintext: false, //true/false，是否强制明文传输，默认为false
-        loading: false //true/false，是否自动调用wln.loadingShow，默认为false
-      }
+    let opt = {
+      toast: true, //true/false，是否启用错误信息toast显示
+      unpack: false, //true/false，是否直接返回res.data，默认为false
+      plaintext: false, //true/false，是否强制明文传输，默认为false
+      loading: false //true/false，是否自动调用wln.loadingShow，默认为false
     }
-    if (opts.loading) {
+    if(opts && typeof opts === 'object')
+    {
+      for(let i in opts) { opt[i] = opts[i]}
+    }
+    if (opt.loading) {
       // 调用Loading显示，指定文本时显示Loading文本
-      typeof opts.loading === 'string' ? wln.loadingShow(opts.loading) : wln.loadingShow();
+      typeof opt.loading === 'string' ? wln.loadingShow(opt.loading) : wln.loadingShow();
     }
     return new Promise((resolve, reject) => {
       let token = ''.randomString(16);
       let headers = { authorization: wln.getStorageSync('ticket') || '', 'x-domain': wln.getStorageSync('x-domain') || '', 'locale': wln.getStorageSync('locale') || '' };
       if (wln.cfgs.headers) { for(let i in wln.cfgs.headers) { headers[i] = wln.cfgs.headers[i]; } }
-      if(data && !opts.plaintext && wln.cfgs.pk)
+      if(data && !opt.plaintext && wln.cfgs.pk)
       {
         if(wln.cfgs.debug) { wln.debug(data); }
         headers['sm2token'] = sm2.doEncrypt(token, wln.cfgs.pk, 1); // 1 - C1C3C2，0 - C1C2C3，默认为1
         data = sm4.encrypt(token, typeof data === 'string' ? data : JSON.stringify(data));
       }
       cb.fetch('POST', wln.cfgs.api, path, data, headers, (res) => {
-        if (opts.loading) {
+        if (opt.loading) {
           new Promise((resolve, reject) => { wln.loadingHide(); setTimeout(resolve, 20); }).then(() => {})
         }
         if(res.data && typeof res.data === 'string')
@@ -143,7 +144,7 @@ function createWln(opts, callback) {
           {
             res.data = JSON.parse(res.data)
           }
-          else if(!opts.plaintext && wln.cfgs.pk && token)
+          else if(!opt.plaintext && wln.cfgs.pk && token)
           {
             res.data = JSON.parse(sm4.decrypt(token, res.data))
             if(wln.cfgs.debug)
@@ -160,31 +161,31 @@ function createWln(opts, callback) {
           reject(res.data || {})
         } else if (res.status != 200 && res.status) {
           if(res.data) {
-            if(typeof res.data === 'string') { opts.toast && wln.toast(res.data) }
-            else if(res.data.message && opts.toast) { wln.toast(res.data.message) }
+            if(typeof res.data === 'string') { opt.toast && wln.toast(res.data) }
+            else if(res.data.message && opt.toast) { wln.toast(res.data.message) }
             reject(res.data)
           } else if(res.statusText) {
-            opts.toast && wln.toast(res.statusText, false)
+            opt.toast && wln.toast(res.statusText, false)
             reject({ Code: res.status, Message: res.statusText })
           } else {
             reject({ Code: res.status })
           }
         } else if (res.data && res.data.message && res.data.code && res.data.code != 200) {
-          opts.toast && wln.toast(res.data.message)
+          opt.toast && wln.toast(res.data.message)
           reject(res.data)
         } else if (res.data && res.data.Message && res.data.Code && res.data.Code != 200) {
-          opts.toast && wln.toast(res.data.Message)
+          opt.toast && wln.toast(res.data.Message)
           reject(res.data)
         } else {
           resolve(new Promise((resolve, reject) => {
-            if (opts.unpack) {
+            if (opt.unpack) {
               //不解包直接返回
               resolve(res.data)
             } else if (res.data.code == 200) {
-              opts.toast && res.data.message && wln.toast(res.data.message, true)
+              opt.toast && res.data.message && wln.toast(res.data.message, true)
               resolve(res.data.data || {})
             } else if (res.data.Code == 200) {
-              opts.toast && res.data.Message && wln.toast(res.data.Message, true)
+              opt.toast && res.data.Message && wln.toast(res.data.Message, true)
               resolve(res.data.Data || {})
             } else {
               reject(res.data)
@@ -192,10 +193,10 @@ function createWln(opts, callback) {
           }))
         }
       }, (err) => {
-        if (opts.loading) {
+        if (opt.loading) {
           new Promise((resolve, reject) => { wln.loadingHide(); setTimeout(resolve, 20); }).then(() => {})
         }
-        opts.toast && wln.toast('Error: ' + err, false)
+        opt.toast && wln.toast('Error: ' + err, false)
         reject({})
       })
     })
